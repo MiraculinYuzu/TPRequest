@@ -1,0 +1,102 @@
+name: TPRequest
+version: 0.27β
+description: Teleport Request Plugin
+author: seiya0818
+website: seiya0818.jimdo.com/
+main: jp.seiya0818.tpr.Main
+depend: [Vault]
+softdepend: [Vault]
+
+commands:
+  tprequest:
+    description: Setup Command
+  tpr:
+    description: Send a requesting teleporting
+    usage: /<command> [player]
+  tpa:
+    description: Accept the request
+    usage: /<command>
+  tpd:
+    description: Deny the request
+    usage: /<command>
+  tphere:
+    description: Player teleports to your location
+    usage: /<command> [player]
+  tpall:
+    description: All players teleport to your location
+    usage: /<command> [player]
+  tptoggle:
+    description: Allow teleporting you without sending request
+    usage: /<command>
+  spawn:
+    description: Teleport to your world's or another world's spawn.
+  setspawn:
+    description: Set the spawn for the world you are currently in.
+  delspawn:
+    description: Delete the spawn of a world.
+  hub:
+    description: Teleport to hub.
+  sethub:
+    description: Set the hub.
+  delhub:
+    description: Delete the hub.
+  chatclear:
+    description: Clear Chat.
+  back:
+    description: Teleport to your death location.
+
+permissions:
+  teleport.admin:
+    description: Give a Admin permission
+    default: op
+  teleport.moderator:
+    description: Give a Mod permission
+    default: op
+  teleport.tpr:
+    description: Ability to execute /tpr command
+    default: op
+  teleport.tpa:
+    description: Ability to execute /tpa command
+    default: true
+  teleport.tpd:
+    description: Ability to execute /tpd command
+    default: true
+  teleport.tphere:
+    description: Ability to execute /tphere command
+    default: op
+  teleport.tpall:
+    description: Ability to execute /tpall command
+    default: op
+  teleport.tptoggle:
+    description: Ability to execute /tptoggle command
+    default: op
+  teleport.reload:
+    description: Ability to execute /tprequest reload command
+    default: op
+  teleport.back:
+    description: Ability to excute /back command.
+    default: op
+  teleport.spawn:
+    description: Ability to execute /spawn command
+    default: op
+  teleport.spawn.others:
+    description: Ability to execute /spawn <world> command
+    default: op
+  teleport.setspawn:
+    description: Ability to execute /setspawn command
+    default: op
+  teleport.delspawn:
+    description: Ability to execute /delspawn command
+    default: op
+  teleport.hub:
+    description: Ability to execute /hub command
+    default: op
+  teleport.sethub:
+    description: Ability to execute /sethub command
+    default: op
+  teleport.delhub:
+    description: Ability to execute /delhub command
+    default: op
+  teleport.hub.chatclear:
+    description: Ability to excute /chatclear command.
+    default: op

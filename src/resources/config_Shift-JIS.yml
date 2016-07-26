@@ -1,0 +1,36 @@
+Vault:
+  use: true
+  price: 100
+  unit: 'doll'
+
+deleteBackLocation:
+  onBackCommand: true
+  onPlayerQuit: true
+  onPlayerKick: true
+
+WarpRiddenEntity: true
+
+#Messages
+
+TeleportPlayer: '&6%target &aにテレポートしました。'
+MakePlayerTeleport: '&6%player &aを&6 %target &aにテレポートさせました。'
+MakePlayerSendReq: '&6%player &aのリクエストを&6 %target &aにを送らせました。'
+TeleportWorld: '&6%world &aにテレポートしました。'
+TeleportSpawn: '&aスポーン地点にテレポートしました。'
+TeleportOtherSpawn: '&6%world &aのスポーン地点にテレポートしました。'
+TeleportHub: '&6Hubにテレポートしました。'
+ChatClear: '&2チャットが &3%player &2によって綺麗にされました。'
+PaidBackPrice: '&a%price%unit 支払いました。'
+Reload: '&aコンフィグをリロードしました。'
+
+NoSpawn: '&cスポーン地点が設定されていません。'
+NoHub: '&cHub地点が設定されていません。'
+PlayerOnlyCmd: '&cプレイヤーのみ実行が可能です。'
+PlayerFailed: '&cプレイヤーが見つかりませんでした。'
+NotSpecifyPlayer: '&cコマンドの後にプレイヤーを指定して下さい。'
+WorldFailed: '&c指定されたワールドは存在しません。'
+NoPerms: '&c権限がありません。'
+NoMoney: '&cお金が足りません。(%price%unit 必要です。)'
+NoDeathLocation: '&cあなたは一回も死んでいません。'
+WrongUsage: '&cコマンドの使用方法を確認して下さい。'
+Error: '&cエラーが発生しました。管理人に報告して下さい。'
