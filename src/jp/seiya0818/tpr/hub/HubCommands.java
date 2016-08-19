@@ -2,6 +2,8 @@ package jp.seiya0818.tpr.hub;
 
 import jp.seiya0818.tpr.Config;
 import jp.seiya0818.tpr.Main;
+import jp.seiya0818.tpr.MoneyUnit;
+import jp.seiya0818.tpr.Process;
 import jp.seiya0818.tpr.Warp;
 
 import org.bukkit.Bukkit;
@@ -41,9 +43,18 @@ public class HubCommands implements CommandExecutor
 				else
 				{
 					Player player = (Player) sender;
-					if(Config.getString("Hub") == null)
+					Double money = Config.getDefaultDouble("Vault.hub-price");
+					if(Config.checkContains("Hub") == false)
 					{
 						player.sendMessage(Main.PlayerPrefix + Config.getString("NoHub"));
+						return true;
+					}
+					else if(Process.vault == true && money != 0 && !player.hasPermission("teleport.bypass.hub"))
+					{
+						if(MoneyUnit.withdraw(player, money) == false)
+						{
+							return true;
+						}
 					}
 					else
 					{
@@ -85,6 +96,7 @@ public class HubCommands implements CommandExecutor
 					Config.setFloat(path + "yaw", loc.getYaw());
 					Config.setFloat(path + "pitch", loc.getPitch());
 					Config.savedata();
+					player.sendMessage(Main.PlayerPrefix + Config.getString("SetHub"));
 					return true;
 				}
 			}
@@ -95,10 +107,16 @@ public class HubCommands implements CommandExecutor
 					sender.sendMessage(Main.PlayerPrefix + Config.getString("NoPerms"));
 					return true;
 				}
+				else if(Config.checkContains("Hub") == false)
+				{
+					sender.sendMessage(Main.PlayerPrefix + Config.getString("NoHub"));
+					return true;
+				}
 				else
 				{
 					Config.setString("Hub", null);
 					Config.savedata();
+					sender.sendMessage(Main.PlayerPrefix + Config.getString("DeleteHub"));
 					return true;
 				}
 			}

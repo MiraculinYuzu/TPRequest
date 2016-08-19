@@ -1,10 +1,13 @@
 package jp.seiya0818.tpr;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.plugin.PluginDescriptionFile;
 
 public class TeleportCommandExecutor implements CommandExecutor
 {
@@ -26,10 +29,12 @@ public class TeleportCommandExecutor implements CommandExecutor
 				if(!(sender instanceof Player))
 				{
 					TeleportMessages.isnotPlayerMsg(sender);
+					return true;
 				}
 				else if(!sender.hasPermission("teleport.tpa"))
 				{
 					TeleportMessages.HasnotPermissionMsg(sender);
+					return true;
 				}
 				else
 				{
@@ -51,10 +56,12 @@ public class TeleportCommandExecutor implements CommandExecutor
 				if(!(sender instanceof Player))
 				{
 					TeleportMessages.isnotPlayerMsg(sender);
+					return true;
 				}
 				else if(!sender.hasPermission("teleport.tpd"))
 				{
 					TeleportMessages.HasnotPermissionMsg(sender);
+					return true;
 				}
 				else
 				{
@@ -62,12 +69,12 @@ public class TeleportCommandExecutor implements CommandExecutor
 					if(player.hasMetadata(TeleportMaterial.Tmeta))
 					{
 						TeleportMaterial.DenyTeleport(player);
-						break;
+						return true;
 					}
 					else if(player.hasMetadata(TeleportMaterial.Tmeta))
 					{
 						TeleportMaterial.DenyTeleport(player);
-						break;
+						return true;
 					}
 					else
 					{
@@ -82,10 +89,12 @@ public class TeleportCommandExecutor implements CommandExecutor
 				if(!(sender instanceof Player))
 				{
 					TeleportMessages.isnotPlayerMsg(sender);
+					return true;
 				}
 				else if(!sender.hasPermission("teleport.tpall"))
 				{
 					TeleportMessages.HasnotPermissionMsg(sender);
+					return true;
 				}
 				else
 				{
@@ -93,7 +102,7 @@ public class TeleportCommandExecutor implements CommandExecutor
 					if(player.hasPermission("teleport.admin"))
 					{
 						TeleportMaterial.TeleportAllPlayerForcibly(player);
-						break;
+						return true;
 					}
 					else
 					{
@@ -119,20 +128,21 @@ public class TeleportCommandExecutor implements CommandExecutor
 				{
 					Player player = (Player) sender;
 					TeleportMaterial.setList(player);
-					return true;
 				}
+				return true;
 			}
 
 
 			else if(cmd.getName().equalsIgnoreCase("tpr") || cmd.getName().equalsIgnoreCase("tphere"))
 			{
 				TeleportMessages.NotargMsg(sender);
-				break;
+				return true;
 			}
 
 			else
 			{
 				TeleportMessages.NoCmdMessage(sender);
+				return true;
 			}
 
 		case 1:
@@ -142,14 +152,17 @@ public class TeleportCommandExecutor implements CommandExecutor
 				if(!(sender instanceof Player))
 				{
 					TeleportMessages.isnotPlayerMsg(sender);
+					return true;
 				}
 				else if(!sender.hasPermission("teleport.tpr"))
 				{
 					TeleportMessages.HasnotPermissionMsg(sender);
+					return true;
 				}
 				else if(target == null)
 				{
 					TeleportMessages.NoPlayerMsg(sender, args[0]);
+					return true;
 				}
 				else
 				{
@@ -158,7 +171,6 @@ public class TeleportCommandExecutor implements CommandExecutor
 					{
 						player.teleport(target);
 						TeleportMessages.TeleportedMsg(player, target);
-						break;
 					}
 					else
 					{
@@ -174,14 +186,17 @@ public class TeleportCommandExecutor implements CommandExecutor
 				if(!(sender instanceof Player))
 				{
 					TeleportMessages.isnotPlayerMsg(sender);
+					return true;
 				}
 				else if(!sender.hasPermission("teleport.tpa"))
 				{
 					TeleportMessages.HasnotPermissionMsg(sender);
+					return true;
 				}
 				else if(target == null)
 				{
 					TeleportMessages.NoPlayerMsg(sender, args[0]);
+					return true;
 				}
 				else
 				{
@@ -200,7 +215,7 @@ public class TeleportCommandExecutor implements CommandExecutor
 								TeleportMessages.HasnotMetadataMsg(player, args[0]);
 							}
 						}
-						break;
+						return true;
 					}
 					else
 					{
@@ -216,14 +231,17 @@ public class TeleportCommandExecutor implements CommandExecutor
 				if(!(sender instanceof Player))
 				{
 					TeleportMessages.isnotPlayerMsg(sender);
+					return true;
 				}
 				else if(!sender.hasPermission("teleport.tpd"))
 				{
 					TeleportMessages.HasnotPermissionMsg(sender);
+					return true;
 				}
 				else if(target == null)
 				{
 					TeleportMessages.NoPlayerMsg(sender, args[0]);
+					return true;
 				}
 				else
 				{
@@ -242,7 +260,7 @@ public class TeleportCommandExecutor implements CommandExecutor
 								TeleportMessages.HasnotMetadataMsg(player, args[0]);
 							}
 						}
-						break;
+						return true;
 					}
 					else
 					{
@@ -258,14 +276,17 @@ public class TeleportCommandExecutor implements CommandExecutor
 				if(!(sender instanceof Player))
 				{
 					TeleportMessages.isnotPlayerMsg(sender);
+					return true;
 				}
 				else if(!sender.hasPermission("teleport.tpall"))
 				{
 					TeleportMessages.HasnotPermissionMsg(sender);
+					return true;
 				}
 				else if(target == null)
 				{
 					TeleportMessages.NoPlayerMsg(sender, args[0]);
+					return true;
 				}
 				else
 				{
@@ -273,12 +294,18 @@ public class TeleportCommandExecutor implements CommandExecutor
 					if(player.hasPermission("teleport.admin"))
 					{
 						TeleportMaterial.TeleportHereForcibly(player, target);
-						break;
+						return true;
 					}
 					else if(player.hasPermission("teleport.moderator"))
 					{
 						if(!target.hasPermission("teleport.admin") || !target.hasPermission("teleport.moderator"))
-						TeleportMaterial.TeleportHereForcibly(player, target);
+						{
+							TeleportMaterial.TeleportHereForcibly(player, target);
+						}
+						else
+						{
+							TeleportMaterial.SendRequest(player, target);
+						}
 					}
 					else
 					{
@@ -303,15 +330,66 @@ public class TeleportCommandExecutor implements CommandExecutor
 						return true;
 					}
 				}
+				else if(args[0].equalsIgnoreCase("info"))
+				{
+					if(!sender.hasPermission("teleport.info"))
+					{
+						sender.sendMessage(Main.PlayerPrefix + Config.getString("NoPerms"));
+					}
+					else
+					{
+						PluginDescriptionFile pdf = Main.instance.getDescription();
+						sender.sendMessage(ChatColor.GOLD + "Plugin Name: " + ChatColor.WHITE + pdf.getName());
+						sender.sendMessage(ChatColor.GOLD + "Version: " + ChatColor.WHITE + pdf.getVersion());
+						sender.sendMessage(ChatColor.GOLD + "Discription: " + ChatColor.WHITE + pdf.getDescription());
+						sender.sendMessage(ChatColor.GOLD + "Website: " + ChatColor.WHITE + pdf.getWebsite());
+					}
+				}
+				else if(args[0].equalsIgnoreCase("changeformat"))
+				{
+					Config.createFile(true);
+				}
+				else if(args[0].equals("testversion"))
+				{
+					sender.sendMessage(Main.instance.getServer().getClass().getPackage().getName());
+					sender.sendMessage(Bukkit.getBukkitVersion());
+					sender.sendMessage(Bukkit.getServer().getVersion());
+				}
+				else if(args[0].equals("checkversion"))
+				{
+					if(Bukkit.getServer().getVersion().contains("1.10"))
+					{
+						sender.sendMessage("1.10です。");
+						return true;
+					}
+					else if(Bukkit.getServer().getVersion().contains("1.9"))
+					{
+						sender.sendMessage("1.9です。");
+						return true;
+					}
+					else if(Bukkit.getServer().getVersion().contains("1.8"))
+					{
+						sender.sendMessage("1.8です。");
+						return true;
+					}
+					else if(Bukkit.getServer().getVersion().contains("1.7"))
+					{
+						sender.sendMessage("1.7です。");
+						return true;
+					}
+					sender.sendMessage("1.6以下です。");
+				}
+				return true;
 			}
 
 			else
 			{
 				TeleportMessages.NoCmdMessage(sender);
+				return true;
 			}
 		default:
 			TeleportMessages.NoCmdMessage(sender);
+			return true;
 		}
-		return true;
 	}
 }

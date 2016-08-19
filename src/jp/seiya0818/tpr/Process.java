@@ -8,6 +8,7 @@ public class Process
 {
 	private static Main main;
 	private static Economy econ = null;
+	private static String unit;
 	public static boolean vault = false;
 
 	public static void Init()
@@ -15,12 +16,12 @@ public class Process
 		main = Main.instance;
 		if (!setupEconomy() && Config.getBoolean("Vault.use") == true)
 		{
-			main.getLogger().warning(Main.LoggerPrefix + "Vaultや経済プラグインが導入されていません。");
-			vault = false;
+			main.getLogger().warning("Vault has not installed.");
+			main.getLogger().warning("(Vaultがインストールされていません。)");
 		}
 		else
 		{
-			vault = true;
+			unit = Config.getString("Vault.unit");
 		}
 	}
 
@@ -36,11 +37,17 @@ public class Process
 			return false;
 		}
 		econ = (Economy)rsp.getProvider();
+		vault = true;
 		return econ != null;
 	}
 
 	public static Economy getEconomy()
 	{
 		return econ;
+	}
+
+	public static String getUnit()
+	{
+		return unit;
 	}
 }

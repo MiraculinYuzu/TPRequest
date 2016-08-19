@@ -5,6 +5,8 @@ import java.util.List;
 import jp.seiya0818.tpr.back.BackCommands;
 import jp.seiya0818.tpr.hub.HubCommands;
 import jp.seiya0818.tpr.spawn.SpawnCommands;
+import jp.seiya0818.tpr.warp.SignListener;
+import jp.seiya0818.tpr.warp.WarpCommands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -14,17 +16,20 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Main extends JavaPlugin
 {
 	public static Main instance;
-	private final TeleportEventHandler listener = new TeleportEventHandler();
+	private final TeleportEventHandler MainListener = new TeleportEventHandler();
+	private final SignListener SignListener = new SignListener();
 	public static String LoggerPrefix = ChatColor.WHITE + "[" + ChatColor.RED + "Teleport_Plugin" + ChatColor.WHITE + "]";
-	public static String PlayerPrefix = ChatColor.BLUE+ "[Teleport]";
+	public static String PlayerPrefix = ChatColor.YELLOW+ "[Teleport]";
 	public static List<String> list;
 
 	public void onEnable()
 	{
 		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(listener, this);
+		pm.registerEvents(MainListener, this);
+		pm.registerEvents(SignListener, this);
 
 		instance = this;
+		Config.createFile(false);
 		Process.Init();
 
 		getCommand("tprequest").setExecutor(new TeleportCommandExecutor(this));
@@ -42,8 +47,7 @@ public class Main extends JavaPlugin
 		getCommand("sethub").setExecutor(new HubCommands(this));
 		getCommand("delhub").setExecutor(new HubCommands(this));
 		getCommand("chatclear").setExecutor(new HubCommands(this));
-
-		Config.createFile();
+		getCommand("warp").setExecutor(new WarpCommands(this));
 
 		Main.list = Config.getUUID("UUID");
 		setValue();
@@ -70,5 +74,10 @@ public class Main extends JavaPlugin
 		{
 			TeleportEventHandler.kick = true;
 		}
+		if(Config.getBoolean("deleteBackLocation.onBackCommand") == true)
+		{
+			BackCommands.back = true;
+		}
+		PlayerPrefix = Config.getString("Prefix");
 	}
 }

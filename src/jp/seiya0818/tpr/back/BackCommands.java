@@ -2,9 +2,9 @@ package jp.seiya0818.tpr.back;
 
 import jp.seiya0818.tpr.Config;
 import jp.seiya0818.tpr.Main;
+import jp.seiya0818.tpr.MoneyUnit;
 import jp.seiya0818.tpr.Process;
 import jp.seiya0818.tpr.Warp;
-import net.milkbowl.vault.economy.EconomyResponse;
 
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 public class BackCommands implements CommandExecutor
 {
 	public final Main plugin;
+	public static boolean back = false;
 
 	public BackCommands(Main plugin)
 	{
@@ -42,36 +43,21 @@ public class BackCommands implements CommandExecutor
 				{
 					Player player = (Player) sender;
 					Location loc = BackProcess.getLocation(player);
+					Double money = Config.getDefaultDouble("Valut.back-price");
 					if(loc == null)
 					{
 						player.sendMessage(Main.PlayerPrefix + Config.getString("NoDeathLocation"));
 						return true;
 					}
-					if(Process.vault == true)
+					if(Process.vault == true && money != 0 && !player.hasPermission("teleport.bypass.back"))
 					{
-						try
+						if(MoneyUnit.withdraw(player, money) == false)
 						{
-							Double money = Config.getDefaultDouble("Vault.price");
-							EconomyResponse r = Process.getEconomy().withdrawPlayer(player, money);
-							if(r.transactionSuccess())
-							{
-								player.sendMessage(Main.PlayerPrefix + Config.getString("PaidBackPrice").replaceAll("%price", money.toString())
-										.replaceAll("%unit", Config.getString("Vault.unit")));
-							}
-							else
-							{
-								player.sendMessage(Main.PlayerPrefix + Config.getString("NoMoney").replaceAll("%price", money.toString())
-										.replaceAll("%unit", Config.getString("Vault.unit")));
-							}
-						}
-						catch(Exception e)
-						{
-							player.sendMessage(Main.PlayerPrefix + Config.getString("Error"));
 							return true;
 						}
 					}
 					Warp.warp(player, loc);
-					if(Config.getBoolean("deleteBackLocation.onBackCommand") == true)
+					if(back == true)
 					{
 						BackProcess.removePlayer(player);
 						return true;

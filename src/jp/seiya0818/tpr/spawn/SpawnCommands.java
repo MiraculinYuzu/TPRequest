@@ -2,6 +2,8 @@ package jp.seiya0818.tpr.spawn;
 
 import jp.seiya0818.tpr.Config;
 import jp.seiya0818.tpr.Main;
+import jp.seiya0818.tpr.MoneyUnit;
+import jp.seiya0818.tpr.Process;
 import jp.seiya0818.tpr.TeleportMessages;
 import jp.seiya0818.tpr.Warp;
 
@@ -42,11 +44,20 @@ public class SpawnCommands implements CommandExecutor
 				else
 				{
 					Player player = (Player) sender;
+					Double money = Config.getDefaultDouble("Vault.spawn-price");
 					World world = player.getWorld();
 					String worldname = world.getName();
-					if(Config.getString("Spawn."+ worldname) == null)
+					if(Config.checkContains("Spawn."+ worldname) == false)
 					{
 						player.sendMessage(Main.PlayerPrefix + Config.getString("NoSpawn"));
+						return true;
+					}
+					else if(Process.vault == true && money != 0 && !sender.hasPermission("teleport.bypass.spawn"))
+					{
+						if(MoneyUnit.withdraw(player, money) == false)
+						{
+							return true;
+						}
 					}
 					else
 					{
@@ -87,6 +98,7 @@ public class SpawnCommands implements CommandExecutor
 					Config.setFloat(path + "yaw", loc.getYaw());
 					Config.setFloat(path + "pitch", loc.getPitch());
 					Config.savedata();
+					player.sendMessage(Main.PlayerPrefix + Config.getString("SetSpawn"));
 					return true;
 				}
 			}
@@ -107,6 +119,11 @@ public class SpawnCommands implements CommandExecutor
 					Player player = (Player) sender;
 					World world = player.getWorld();
 					String worldname = world.getName();
+					if(Config.checkContains("Spawn."+ worldname) == false)
+					{
+						sender.sendMessage(Main.PlayerPrefix + Config.getString("NoSpawn"));
+						return true;
+					}
 					String path = "Spawn." + worldname + ".";
 					Config.setString(path + "x", null);
 					Config.setString(path + "y", null);
@@ -114,6 +131,7 @@ public class SpawnCommands implements CommandExecutor
 					Config.setString(path + "yaw", null);
 					Config.setString(path + "pitch", null);
 					Config.savedata();
+					player.sendMessage(Main.PlayerPrefix + Config.getString("DeleteSpawn"));
 					return true;
 				}
 			}
@@ -137,9 +155,18 @@ public class SpawnCommands implements CommandExecutor
 					Player player = (Player) sender;
 					World world = Bukkit.getWorld(args[0]);
 					String worldname = world.getName();
+					Double money = Config.getDefaultDouble("Vault.spawn-price");
 					if(Config.getString("Spawn."+ worldname) == null)
 					{
 						player.sendMessage(Main.PlayerPrefix + Config.getString("NoSpawn"));
+						return true;
+					}
+					else if(Process.vault == true && money != 0)
+					{
+						if(MoneyUnit.withdraw(player, money) == false)
+						{
+							return true;
+						}
 					}
 					else
 					{
@@ -177,6 +204,7 @@ public class SpawnCommands implements CommandExecutor
 					Config.setString(path + "yaw", null);
 					Config.setString(path + "pitch", null);
 					Config.savedata();
+					sender.sendMessage(Main.PlayerPrefix + Config.getString("DeleteSpawn"));
 					return true;
 				}
 			}
